@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to add custom JavaScript to WooCommerce Thank You Page? — significan.se</title>
+<meta name="description" content="Theme updates wipe out snippets added to functions.php. Here&#x27;s how to package your Thank You page tracking as a proper WooCommerce plugin instead.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How to add custom JavaScript to WooCommerce Thank You Page? — significan.se">
+<meta property="og:description" content="Theme updates wipe out snippets added to functions.php. Here&#x27;s how to package your Thank You page tracking as a proper WooCommerce plugin instead.">
+<meta property="og:url" content="https://significan.se/blog/custom-javascript-woocommerce-thank-you-page/">
+<meta property="og:site_name" content="significan.se">
+<meta property="og:image" content="https://significan.se/assets/blog/custom-javascript-woocommerce-thank-you-page/hero.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="/assets/css/blog.css">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicon-16x16.png">
+<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "How to add custom JavaScript to WooCommerce Thank You Page?", "datePublished": "2021-10-26", "author": {"@type": "Person", "name": "Reza Jalaei", "url": "https://jalaei.com/"}, "image": "https://significan.se/assets/blog/custom-javascript-woocommerce-thank-you-page/hero.jpg", "mainEntityOfPage": "https://significan.se/blog/custom-javascript-woocommerce-thank-you-page/", "publisher": {"@type": "Person", "name": "Reza Jalaei"}}</script>
+</head>
+<body>
+<header class="menu-bar">
+  <img class="apple" src="/assets/img/apple-logo.svg" alt="" width="13">
+  <span class="brand"><a href="/">significan.se</a></span>
+  <span class="spacer"></span>
+  <a class="home-link" href="https://jalaei.com" target="_blank" rel="noopener">jalaei.com &#8599;</a>
+</header>
+<div class="wrap">
+  <div class="window">
+    <div class="title-bar">
+      <span class="controls"><span class="control close"></span><span class="control minimize"></span><span class="control zoom"></span></span>
+      <div class="title" role="presentation">How to add custom JavaScript to WooCommerce Thank You Page?</div>
+    </div>
+    <div class="window-body">
+      <article class="article">
+        <p class="breadcrumb"><a href="/">Blog</a> &raquo; How to add custom JavaScript to WooCommerce Thank You Page?</p>
+        <header>
+          <h1>How to add custom JavaScript to WooCommerce Thank You Page?</h1>
+          <p class="byline">
+            <span>By Reza Jalaei</span><span class="dot">&middot;</span>
+            <time datetime="2021-10-26">Oct 26, 2021</time><span class="dot">&middot;</span>
+            <span>3 min read</span>
+          </p>
+          <ul class="tags"><li>WooCommerce</li><li>Development</li><li>A/B Testing</li></ul>
+        </header>
+        <img class="hero" src="/assets/blog/custom-javascript-woocommerce-thank-you-page/hero.jpg" alt="How to add custom JavaScript to WooCommerce Thank You Page?" width="800">
+        <div class="prose">
+<p>First things first, why would you need to add a JavaScript snippet to your Thank you page?</p>
+<p>Well in my case, I wanted to add a piece of code that sends revenue data to <a href="https://figpii.com/" target="_blank" rel="noopener">FigPii</a>.</p>
+<p>This allows users to measure the revenue impact of A/B tests running on their WooCommerce website.</p>
+<p>You can add a PHP snippet to your function.php file but if you update your theme it'll disappear so the best way to go forward is to create a plugin that'll add the code.</p>
+<p>Create a file called <strong>custom_code.php </strong>and start editing it in your favorite IDE.</p>
+<p>Start by adding this snippet to your file so direct access to the file is not allowed:</p>
+<pre><code>if ( ! defined( &#x27;ABSPATH&#x27; ) ) {
+    exit; // Exit if accessed directly
+}</code></pre>
+<p>Then edit the Plugin name and all the other information you see bellow:</p>
+<pre><code>&lt;?php
+/**
+ * Plugin Name: FigPii
+ * Plugin URI: https://figpii.com
+ * Description: FigPii integration for WooCommerce.
+ * Author: FigPii
+ * Author URI: https://figpii.com/
+ * Version: 1.0
+ * Text Domain: figpii
+ * Domain Path: /languages/
+ *
+ * License: GNU General Public License v3.0
+ * License URI: http://www.gnu.org/licenses/gpl-3.0.html
+ *
+ * Woo: 12345:342928dfsfhsf8429842374wdf4234sfd
+ * WC requires at least: 3.0
+ * WC tested up to: 5.8.0
+ *
+ * License: GNU General Public License v3.0
+ * License URI: http://www.gnu.org/licenses/gpl-3.0.html
+ */
+if ( ! defined( &#x27;ABSPATH&#x27; ) ) {
+    exit; // Exit if accessed directly
+}</code></pre>
+<p>Let's create our function now:</p>
+<pre><code>function build_revenue_tracking_script( $order_id ) {
+    $order = wc_get_order( $order_id );
+    $order_total = $order-&gt;get_total();
+    echo &quot;&lt;script&gt;let order_total = \&quot;$order_total\&quot;;window._fpEvent=window._fpEvent||[];window._fpEvent.push([\&quot;processOrder\&quot;,{revenue: order_total}]);window._fpEvent.push([\&quot;eventConversion\&quot;,{value:\&quot;purchase\&quot;}]);&lt;/script&gt;&quot;;
+}</code></pre>
+<p>What this does is take the $order_id from the thank you page, then using <em><strong>wc_get_order </strong></em>we're going to retrieve order data, in my case only the total order amount is needed but you can fetch other related data, such as item name, product id and so on.</p>
+<pre><code>$order = wc_get_order( 65 );
+$order_items = $order-&gt;get_items();
+
+foreach ( $order_items as $item_id =&gt; $item ) {
+    // methods of WC_Order_Item class
+    // The element ID can be obtained from an array key or from:
+    $item_id = $item-&gt;get_id();
+
+    // methods of WC_Order_Item_Product class
+    $item_name  = $item-&gt;get_name();       // Name of the product
+    $item_type  = $item-&gt;get_type();       // Type of the order item (&quot;line_item&quot;)
+    $product_id = $item-&gt;get_product_id(); // the Product id
+    $wc_product = $item-&gt;get_product();    // the WC_Product object
+
+    // order item data as an array
+    $item_data = $item-&gt;get_data();
+    echo $item_data[&#x27;name&#x27;];
+    echo $item_data[&#x27;product_id&#x27;];
+    echo $item_data[&#x27;variation_id&#x27;];
+    echo $item_data[&#x27;quantity&#x27;];
+    echo $item_data[&#x27;tax_class&#x27;];
+    echo $item_data[&#x27;subtotal&#x27;];
+    echo $item_data[&#x27;subtotal_tax&#x27;];
+    echo $item_data[&#x27;total&#x27;];
+    echo $item_data[&#x27;total_tax&#x27;];
+}</code></pre>
+<p>Having the $order_id is crucial for our function to work so make sure to add the following action above your main function:</p>
+<pre><code>add_action( &#x27;woocommerce_thankyou&#x27;, &#x27;build_revenue_tracking_script&#x27; );</code></pre>
+<p>At the end you'll have something that looks like this:</p>
+<pre><code>&lt;?php
+/**
+ * Plugin Name: FigPii
+ * Plugin URI: https://figpii.com
+ * Description: FigPii integration for WooCommerce.
+ * Author: FigPii
+ * Author URI: https://figpii.com/
+ * Version: 1.0
+ * Text Domain: figpii
+ * Domain Path: /languages/
+ *
+ * License: GNU General Public License v3.0
+ * License URI: http://www.gnu.org/licenses/gpl-3.0.html
+ *
+ * Woo: 12345:342928dfsfhsf8429842374wdf4234sfd
+ * WC requires at least: 3.0
+ * WC tested up to: 5.8.0
+ *
+ * License: GNU General Public License v3.0
+ * License URI: http://www.gnu.org/licenses/gpl-3.0.html
+ */
+if ( ! defined( &#x27;ABSPATH&#x27; ) ) {
+    exit; // Exit if accessed directly
+}
+
+add_action( &#x27;woocommerce_thankyou&#x27;, &#x27;build_revenue_tracking_script&#x27; );
+
+function build_revenue_tracking_script( $order_id ) {
+    $order = wc_get_order( $order_id );
+    $order_total = $order-&gt;get_total();
+    echo &quot;&lt;script&gt;let order_total = \&quot;$order_total\&quot;;window._fpEvent=window._fpEvent||[];window._fpEvent.push([\&quot;processOrder\&quot;,{revenue: order_total}]);window._fpEvent.push([\&quot;eventConversion\&quot;,{value:\&quot;purchase\&quot;}]);&lt;/script&gt;&quot;;
+}
+?&gt;</code></pre>
+<p>Then all you need to do is to compress this file and install it manually on your WordPress / WooCommerce instance.</p>
+<p>This function will fetch the order total based on the order id and add the data to our custom revenue tracking code.</p>
+
+        </div>
+        <div class="post-footer">
+          <a class="retro-button" href="/">&#8592; All posts</a>
+          <p class="archive-note">Originally published on <a href="https://web.archive.org/web/20220804210535/https://www.rezziza.com/post/how-to-add-custom-javascript-to-woocommerce-thank-you-page" target="_blank" rel="noopener">rezziza.com</a> (recovered from the Internet Archive).</p>
+        </div>
+      </article>
+    </div>
+  </div>
+  <footer class="site-footer">
+  &copy; Reza Jalaei &middot; <a href="https://jalaei.com" target="_blank" rel="noopener">jalaei.com</a> &middot;
+  <a href="https://www.linkedin.com/in/reza-j/" target="_blank" rel="noopener">LinkedIn</a> &middot;
+  <a href="https://github.com/reza-jalaei" target="_blank" rel="noopener">GitHub</a>
+</footer>
+</div>
+</body>
+</html>
