@@ -222,3 +222,152 @@ img { max-width: 100%; height: auto; }
   .masthead { flex-direction: row; }
   .title-bar .title { font-size: 12px; }
 }
+
+/* =========================================================================
+   Cookie consent (orestbida/cookieconsent v3), themed to match the Platinum UI.
+   ========================================================================= */
+#cc-main {
+  --cc-font-family: "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, sans-serif;
+  --cc-bg: #f4f4f4;
+  --cc-primary-color: #000;
+  --cc-secondary-color: #333;
+  --cc-modal-border-radius: 0;
+  --cc-btn-border-radius: 0;
+  --cc-modal-margin: 16px;
+  --cc-modal-transition-duration: .14s;
+  --cc-link-color: #1745d8;
+
+  --cc-btn-primary-bg: #e9e9e9;
+  --cc-btn-primary-color: #000;
+  --cc-btn-primary-border-color: #000;
+  --cc-btn-primary-hover-bg: #dcdcdc;
+  --cc-btn-primary-hover-color: #000;
+  --cc-btn-primary-hover-border-color: #000;
+  --cc-btn-secondary-bg: #e9e9e9;
+  --cc-btn-secondary-color: #000;
+  --cc-btn-secondary-border-color: #000;
+  --cc-btn-secondary-hover-bg: #dcdcdc;
+  --cc-btn-secondary-hover-color: #000;
+  --cc-btn-secondary-hover-border-color: #000;
+
+  --cc-separator-border-color: #bdbdbd;
+
+  --cc-toggle-on-bg: #1745d8;
+  --cc-toggle-off-bg: #9a9a9a;
+  --cc-toggle-on-knob-bg: #fff;
+  --cc-toggle-off-knob-bg: #fff;
+  --cc-toggle-readonly-bg: #c4c4c4;
+  --cc-toggle-readonly-knob-bg: #fff;
+
+  --cc-cookie-category-block-bg: #f9f9f9;
+  --cc-cookie-category-block-border: #000;
+  --cc-cookie-category-block-hover-bg: #f0f0f0;
+  --cc-cookie-category-block-hover-border: #000;
+  --cc-cookie-category-expanded-block-bg: #ececec;
+  --cc-cookie-category-expanded-block-hover-bg: #e3e3e3;
+
+  --cc-overlay-bg: rgba(0, 0, 0, .35);
+  --cc-footer-bg: #ececec;
+  --cc-footer-color: #333;
+  --cc-footer-border-color: #000;
+}
+
+/* The two modals look like Platinum windows */
+#cc-main .cm,
+#cc-main .pm {
+  background: #f4f4f4;
+  border: 1px solid #000;
+  box-shadow: 1px 1px 0 #fff, 2px 2px 0 #000, 0 12px 34px rgba(0, 0, 0, .28);
+}
+
+/* Consent banner: faux Platinum title bar via ::before */
+#cc-main .cm { padding-top: 2.3rem; }
+#cc-main .cm::before {
+  content: "significan.se";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, .2);
+  border-bottom: 1px solid #000;
+  background:
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, .18) 0, rgba(255, 255, 255, .18) 2px, rgba(0, 0, 0, .05) 2px, rgba(0, 0, 0, .05) 4px),
+    linear-gradient(#2d63f0, #1745d8);
+}
+#cc-main .cm__title { font-size: 15px; font-weight: 600; }
+
+/* Preferences modal header acts as the Platinum title bar */
+#cc-main .pm__header {
+  border-bottom: 1px solid #000;
+  color: #fff;
+  background:
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, .18) 0, rgba(255, 255, 255, .18) 2px, rgba(0, 0, 0, .05) 2px, rgba(0, 0, 0, .05) 4px),
+    linear-gradient(#2d63f0, #1745d8);
+}
+#cc-main .pm__title { color: #fff; font-weight: 600; text-shadow: 1px 1px 0 rgba(0, 0, 0, .2); }
+/* Close control styled like the red window button */
+#cc-main .pm__close-btn {
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, .55);
+  color: #5a0a00;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, .9), rgba(255, 255, 255, .15)), linear-gradient(#ff6b63, #d9332a);
+}
+#cc-main .pm__close-btn:hover {
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, .95), rgba(255, 255, 255, .25)), linear-gradient(#ff7d75, #e23b32);
+}
+
+/* Buttons → retro-button */
+#cc-main .cm__btn,
+#cc-main .pm__btn {
+  border-radius: 0;
+  border: 1px solid #000;
+  background: linear-gradient(#fff, #e9e9e9);
+  box-shadow: 1px 1px 0 #fff, 2px 2px 0 #000;
+  color: #000;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 6px 16px;
+  transition: background .1s ease;
+}
+#cc-main .cm__btn:hover,
+#cc-main .pm__btn:hover { background: linear-gradient(#fff, #dcdcdc); }
+#cc-main .cm__btn:active,
+#cc-main .pm__btn:active {
+  box-shadow: inset 1px 1px 0 rgba(0, 0, 0, .4);
+  background: linear-gradient(#e0e0e0, #cfcfcf);
+}
+/* "Manage preferences" is a quiet link; Accept all / Reject all stay equally weighted */
+#cc-main .cm__btn[data-role="show"] {
+  background: none;
+  border-color: transparent;
+  box-shadow: none;
+  font-weight: 400;
+  text-decoration: underline;
+  color: #1745d8;
+}
+#cc-main .cm__btn[data-role="show"]:hover { background: none; color: #0a2ea0; }
+
+#cc-main .cm__desc,
+#cc-main .pm__section-desc,
+#cc-main .pm__section-title { color: #1a1a1a; }
+#cc-main .pm__section { border-radius: 0; }
+#cc-main .pm__section--expandable .pm__section-arrow {
+  background: linear-gradient(#fff, #e0e0e0);
+  border: 1px solid rgba(0, 0, 0, .45);
+}
+#cc-main .pm__badge {
+  border: 1px solid #000;
+  border-radius: 0;
+  background: #eaeaea;
+  color: #000;
+  font-weight: 400;
+}
+#cc-main .cm a,
+#cc-main .pm a { color: var(--cc-link-color); }
